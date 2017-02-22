@@ -1,0 +1,23 @@
+{
+  "name": "anacreation/etvtest",
+  "description": "Test Module for ETVFun",
+  "type": "lib",
+  "license": "All-right reserved",
+  "authors": [
+	{
+	  "name": "Xavier Au",
+	  "email": "xavier.au@anacreation.com"
+	}
+  ],
+  "minimum-stability": "dev",
+  "require": {
+	"illuminate/support": "^5.3",
+	"illuminate/database": "~5.3",
+    "illuminate/http": "~5.3"
+  },
+  "autoload": {
+	"files": [
+	  "src/Helpers/Utilities.php"
+	]
+  }
+}
