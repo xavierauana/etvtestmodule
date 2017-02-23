@@ -17,7 +17,7 @@
   },
   "autoload": {
 	"psr-4":{
-	  "Anacreation\\Etv\\":"src/"
+	  "Anacreation\\Etvtest\\":"src/"
 	},
 	"files": [
 	  "src/Helpers/Utilities.php"
