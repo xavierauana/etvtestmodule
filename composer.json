@@ -16,6 +16,9 @@
 	"illuminate/http": "~5.3"
   },
   "autoload": {
+	"psr4":{
+	  "Anacreation\\Etv\\":"src/"
+	},
 	"files": [
 	  "src/Helpers/Utilities.php"
 	]
