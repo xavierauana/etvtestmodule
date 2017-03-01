@@ -26,7 +26,7 @@ class TestConverter
         foreach ($questions as $question){
             /** @var \Anacreation\Etvtest\Converters\ConverterInterface $converter */
             $converter = QuestionConverterFactory($question);
-            $questionsArray[] = $converter->convert($question);
+            $questionsArray[] = $converter->convert($question)[0];
         }
         return $questionsArray;
     }
