@@ -21,12 +21,13 @@ class SingleFillInBlanksConverter extends AbstractConverter
     protected function _convert($subject) {
         $data = [];
 
-        $data['choices'] = (new ChoiceConverter())->convert($subject->choices);
-        $data['prefix'] = $subject->prefix;
-        $data['content'] = $subject->content;
-        $data['question_type_id'] = $subject->QuestionType->id;
-        $data['is_active'] = !!$subject->is_active;
         $data['id'] = $subject->id;
+        $data['prefix'] = $subject->prefix;
+        $data['choices'] = (new ChoiceConverter())->convert($subject->choices);
+        $data['content'] = $subject->content;
+        $data['is_active'] = !!$subject->is_active;
+        $data['page_number'] = $subject->page_number;
+        $data['question_type_id'] = $subject->QuestionType->id;
 
         return $data;
     }

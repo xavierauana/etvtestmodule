@@ -21,14 +21,15 @@ class MultipleMultipleChoiceConverter extends AbstractConverter
     protected function _convert($subject) {
         $data = [];
 
-        $data['choices'] = (new ChoiceConverter())->convert($subject->choices);
-        $data['answer'] = $subject->answer->content;
-        $data['is_required_all'] = !!$subject->answer->is_required_all;
-        $data['is_fractional'] = !!$subject->is_fractional;
-        $data['prefix'] = $subject->prefix;
-        $data['content'] = $subject->content;
-        $data['question_type_id'] = $subject->QuestionType->id;
         $data['id'] = $subject->id;
+        $data['prefix'] = $subject->prefix;
+        $data['answer'] = $subject->answer->content;
+        $data['choices'] = (new ChoiceConverter())->convert($subject->choices);
+        $data['content'] = $subject->content;
+        $data['page_number'] = $subject->page_number;
+        $data['is_fractional'] = !!$subject->is_fractional;
+        $data['is_required_all'] = !!$subject->answer->is_required_all;
+        $data['question_type_id'] = $subject->QuestionType->id;
 
         return $data;
     }
