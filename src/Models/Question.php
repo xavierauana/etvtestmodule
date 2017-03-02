@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Question extends Model
 {
     protected $fillable = [
-        'content','question_type_id', 'is_active', 'is_fractional', 'prefix'
+        'content','question_type_id', 'is_active', 'is_fractional', 'prefix', "page_number", 'order'
     ];
 
     public function QuestionType() {

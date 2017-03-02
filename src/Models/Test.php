@@ -9,7 +9,6 @@ class Test extends Model
     protected $fillable = [
         'title',
         'is_active',
-        'page_number',
         'order'
     ];
 
