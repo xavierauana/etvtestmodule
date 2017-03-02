@@ -18,10 +18,12 @@ class SingleFillInBlanksConverter extends AbstractConverter
     protected function _convert($subject) {
         $data = [];
 
-        $data['content'] = $subject->content;
-        $data['prefix'] = $subject->prefix;
-        $data['question_type_id'] = $subject->QuestionType->id;
         $data['id'] = $subject->id;
+        $data['prefix'] = $subject->prefix;
+        $data['content'] = $subject->content;
+        $data['page_number'] = $subject->page_number;
+        $data['question_type_id'] = $subject->QuestionType->id;
+
 
         return $data;
     }

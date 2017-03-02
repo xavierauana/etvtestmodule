@@ -13,5 +13,5 @@ function QuestionConverterFactory(Question $question, string $ConverterType= Con
         $className = "Anacreation\\Etvtest\\Converters\\EditConverters\\" . $question->QuestionType->code . "Converter";
     }
 
-    return App::make($className);
+    return app($className);
 }
