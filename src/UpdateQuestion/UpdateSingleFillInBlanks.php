@@ -25,6 +25,7 @@ class UpdateSingleFillInBlanks implements UpdateOperatorInterface
             "content"=>$data['content'],
             "prefix"=>$data['prefix'],
             "is_active"=>$data['is_active'],
+            "page_number"=>$data['page_number'],
         ];
 
         $question->update($questionData);

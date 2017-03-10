@@ -15,6 +15,13 @@
 	"illuminate/database": "~5.3",
 	"illuminate/http": "~5.3"
   },
+  "require-dev": {
+	"fzaninotto/faker": "~1.4",
+	"mockery/mockery": "0.9.*",
+	"phpunit/phpunit": "~5.0",
+	"symfony/css-selector": "3.1.*",
+	"symfony/dom-crawler": "3.1.*"
+  },
   "autoload": {
 	"psr-4":{
 	  "Anacreation\\Etvtest\\":"src/"

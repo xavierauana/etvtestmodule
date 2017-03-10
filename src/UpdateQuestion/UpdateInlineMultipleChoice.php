@@ -56,6 +56,7 @@ class UpdateInlineMultipleChoice implements UpdateOperatorInterface
             'prefix'  => $data['prefix'],
             'content' => $data['content'],
             'is_active' => $data['is_active'],
+            'page_number' => $data['page_number'],
         ]);
 
         return $question;

@@ -24,6 +24,7 @@ class UpdateMultipleFillInBlanks implements UpdateOperatorInterface
         $questionData = [
             "content"=>$data['content'],
             "prefix"=>$data['prefix'],
+            "page_number"=>$data['page_number'],
             "is_active"=>$data['is_active'],
             "is_fractional"=>$data['is_fractional'],
         ];
