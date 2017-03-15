@@ -10,17 +10,25 @@ namespace Anacreation\Etvtest\Factory;
 
 use Anacreation\Etvtest\Converters\ConverterInterface;
 use Anacreation\Etvtest\Converters\ConverterType;
+use Anacreation\Etvtest\Models\Question;
 
 class QuestionConverterFactory
 {
-    public static function make(Question $question, string $ConverterType= ConverterType::ATTEMPT): ConverterInterface  {
+    public static function make(Question $question,
+        string $ConverterType = ConverterType::ATTEMPT): ConverterInterface {
 
-        if($ConverterType == ConverterType::ATTEMPT){
+        $className = null;
+        if ($ConverterType == ConverterType::ATTEMPT) {
             $className = "Anacreation\\Etvtest\\Converters\\" . $question->QuestionType->code . "Converter";
-        }elseif($ConverterType == ConverterType::EDIT){
+        } elseif ($ConverterType == ConverterType::EDIT) {
             $className = "Anacreation\\Etvtest\\Converters\\EditConverters\\" . $question->QuestionType->code . "Converter";
         }
 
+        if ($className == null) {
+            throw new \Exception("No Converter Found!");
+        }
+
         return app($className);
+
     }
 }
