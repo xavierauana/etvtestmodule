@@ -8,8 +8,28 @@
 namespace Anacreation\Etvtest\Converters;
 
 
-class ChoiceConverter extends AbstractConverter
+
+use Illuminate\Support\Collection;
+
+class ChoiceConverter implements ConverterInterface
 {
+
+    public function convert($subject): array {
+        $data = [];
+        if ($subject instanceof Collection) {
+            if ($subject->count() > 0) {
+                $subjects = $subject;
+                foreach ($subjects as $subject) {
+                    $data[] = $this->_convert($subject);
+                }
+            }
+        } else {
+            $data[] = $this->_convert($subject);
+        }
+
+        return $data;
+
+    }
 
     /**
      * @param \Anacreation\Etvtest\Models\Choice $subject
