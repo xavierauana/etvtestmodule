@@ -3,7 +3,7 @@
 namespace Anacreation\Etvtest\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Database\Schema\Builder;
 
 class Question extends Model
 {
@@ -41,7 +41,7 @@ class Question extends Model
         return $query->whereIsActive(true);
     }
 
-    public function scopeOrdered($query): Relation {
+    public function scopeOrdered($query): Builder {
         return $query->orderBy(['order'=>'asc', 'created_at'=>'desc']);
     }
 }
