@@ -22,8 +22,6 @@ class MultipleFillInBlanksConverter extends AbstractConverter
         $data = [];
 
         $data['choices'] = (new ChoiceConverter())->convert($subject->choices);
-        $data['is_active'] = !!$subject->is_active;
-        $data['is_ordered'] = !!$subject->answer->is_ordered;
         $data['is_fractional'] = !!$subject->is_fractional;
 
         return $data;

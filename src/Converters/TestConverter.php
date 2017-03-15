@@ -8,6 +8,7 @@
 namespace Anacreation\Etvtest\Converters;
 
 
+use Anacreation\Etvtest\Factory\QuestionConverterFactory;
 use Anacreation\Etvtest\Models\Test;
 use Illuminate\Support\Collection;
 
@@ -25,7 +26,7 @@ class TestConverter
         $questionsArray = [];
         foreach ($questions as $question){
             /** @var \Anacreation\Etvtest\Converters\ConverterInterface $converter */
-            $converter = QuestionConverterFactory($question);
+            $converter = QuestionConverterFactory::make($question);
             $questionsArray[] = $converter->convert($question)[0];
         }
         return $questionsArray;
