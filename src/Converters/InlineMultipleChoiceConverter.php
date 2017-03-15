@@ -23,10 +23,6 @@ class InlineMultipleChoiceConverter extends AbstractConverter
         $data = [];
 
         $data['sub_questions'] = $this->getSubQuestions($subject->subQuestions);
-        $data['prefix'] = $subject->prefix;
-        $data['content'] = $subject->content;
-        $data['question_type_id'] = $subject->QuestionType->id;
-        $data['id'] = $subject->id;
 
         return $data;
     }

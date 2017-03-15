@@ -60,7 +60,7 @@ class TestServices
     public function getTestById($id) {
         return Test::with([
             'questions' => function ($query) {
-                return $query->with(['answer', 'choices', 'subQuestions']);
+                return $query->ordered()->with(['answer', 'choices', 'subQuestions']);
             }
         ])->findOrFail($id);
     }
@@ -79,11 +79,11 @@ class TestServices
     public function getTestByIdForStudents($id) {
         return Test::with([
             'Questions' => function ($query) {
-                $query->isActive()->with([
-                    "Choices" => function ($query) {
-                        $query->limitedInfo();
-                    }
-                ]);
+                $query->ordered()->isActive()->with([
+                        "Choices" => function ($query) {
+                            $query->limitedInfo();
+                        }
+                    ]);
             }
         ])->findOrFail($id);
     }

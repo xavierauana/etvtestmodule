@@ -5,9 +5,10 @@
  * Time: 4:36 PM
  */
 
-namespace Anacreation\Etvtest\Converters;
+namespace Anacreation\Etvtest\Factory;
 
 
+use Anacreation\Etvtest\Converters\AbstractConverter;
 use Anacreation\Etvtest\Models\Question;
 
 class EditQuestionConverterFactory

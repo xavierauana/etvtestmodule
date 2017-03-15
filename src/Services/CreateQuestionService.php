@@ -7,9 +7,8 @@
 
 namespace Anacreation\Etvtest\Services;
 
-use Anacreation\Etvtest\Contracts\CreateQuestionInterface;
+use Anacreation\Etvtest\Factory\QuestionCreatorFactory;
 use Anacreation\Etvtest\Models\Question;
-use Anacreation\Etvtest\Models\QuestionType;
 use Anacreation\Etvtest\Models\Test;
 
 /**
@@ -18,19 +17,6 @@ use Anacreation\Etvtest\Models\Test;
  */
 class CreateQuestionService
 {
-    /**
-     * @var \Illuminate\Database\Eloquent\Collection|static[]
-     */
-    private $questionTypes;
-
-    /**
-     * CreateQuestionService constructor.
-     */
-    public function __construct() {
-        $this->questionTypes = QuestionType::all();
-    }
-
-
     /**
      * @param array $inputs
      * @param       $testId
@@ -42,36 +28,11 @@ class CreateQuestionService
             throw new \InvalidArgumentException("invalid array");
         }
 
-        $object = $this->createObject($inputs);
+        $questionCreator = QuestionCreatorFactory::make($inputs['question_type_id']);
 
         $test = Test::findOrFail($testId);
 
-        return $object->create($inputs, $test);
+        return $questionCreator->create($inputs, $test);
 
     }
-
-    /**
-     * @param $inputs
-     * @return CreateQuestionInterface
-     * @throws \Exception
-     */
-    private function createObject($inputs) {
-
-        $type = $this->questionTypes->first(function ($type) use ($inputs) {
-            return $type->id == $inputs['question_type_id'];
-        });
-
-        if (!$type) {
-            throw new \InvalidArgumentException("Invalid question type");
-        }
-
-        $object = app("Anacreation\\Etvtest\\QuestionType\\" . $type->code);
-
-        if ($object instanceof CreateQuestionInterface) {
-            return $object;
-        }
-
-        throw new \Exception("No Class {$type->code} fulfill interface.");
-    }
-
 }

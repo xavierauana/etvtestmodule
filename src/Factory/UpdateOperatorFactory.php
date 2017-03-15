@@ -5,7 +5,7 @@
  * Time: 4:29 PM
  */
 
-namespace Anacreation\Etvtest\UpdateQuestion;
+namespace Anacreation\Etvtest\Factory;
 
 
 use Anacreation\Etvtest\Contracts\UpdateOperatorInterface;

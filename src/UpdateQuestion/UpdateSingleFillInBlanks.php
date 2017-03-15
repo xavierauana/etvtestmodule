@@ -22,10 +22,11 @@ class UpdateSingleFillInBlanks implements UpdateOperatorInterface
     public function update(Question $question, array $data): Question {
         // TODO: Implement update() method.
         $questionData = [
-            "content"=>$data['content'],
-            "prefix"=>$data['prefix'],
-            "is_active"=>$data['is_active'],
-            "page_number"=>$data['page_number'],
+            "content"     => $data['content'],
+            "prefix"      => $data['prefix'],
+            "is_active"   => $data['is_active'],
+            "order"       => $data['order'],
+            "page_number" => $data['page_number'],
         ];
 
         $question->update($questionData);
@@ -35,7 +36,7 @@ class UpdateSingleFillInBlanks implements UpdateOperatorInterface
         $choice = $question->choices()->findOrFail($choiceData['id']);
 
         $choice->update([
-            'content'=>$choiceData['content']
+            'content' => $choiceData['content']
         ]);
 
         return $question;

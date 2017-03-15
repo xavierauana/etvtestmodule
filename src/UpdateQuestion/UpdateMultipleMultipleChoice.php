@@ -12,8 +12,6 @@ use Anacreation\Etvtest\Models\Question;
 
 class UpdateMultipleMultipleChoice extends AbstractMultipleChoiceUpdateOperator
 {
-
-
     /**
      * @param $choices
      */

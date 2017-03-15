@@ -22,11 +22,12 @@ class UpdateMultipleFillInBlanks implements UpdateOperatorInterface
     public function update(Question $question, array $data): Question {
         // TODO: Implement update() method.
         $questionData = [
-            "content"=>$data['content'],
-            "prefix"=>$data['prefix'],
-            "page_number"=>$data['page_number'],
-            "is_active"=>$data['is_active'],
-            "is_fractional"=>$data['is_fractional'],
+            "content"       => $data['content'],
+            "prefix"        => $data['prefix'],
+            "page_number"   => $data['page_number'],
+            "order"         => $data['order'],
+            "is_active"     => $data['is_active'],
+            "is_fractional" => $data['is_fractional'],
         ];
 
         $question->update($questionData);
@@ -35,16 +36,16 @@ class UpdateMultipleFillInBlanks implements UpdateOperatorInterface
 
         $answerIds = [];
 
-        foreach ($choiceData as $choicesDatum){
-            $choice =  $question->choices()->findOrFail($choicesDatum['id']);
+        foreach ($choiceData as $choicesDatum) {
+            $choice = $question->choices()->findOrFail($choicesDatum['id']);
             $choice->update([
-                'content'=>$choicesDatum['content']
+                'content' => $choicesDatum['content']
             ]);
             $answerIds[] = $choicesDatum['id'];
         }
 
         $question->answer->update([
-            'content'=>$answerIds
+            'content' => $answerIds
         ]);
 
         return $question;

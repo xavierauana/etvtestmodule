@@ -8,8 +8,8 @@
 namespace Anacreation\Etvtest\Services;
 
 
+use Anacreation\Etvtest\Factory\UpdateOperatorFactory;
 use Anacreation\Etvtest\Models\Question;
-use Anacreation\Etvtest\UpdateQuestion\UpdateOperatorFactory;
 
 class EditQuestionServices
 {

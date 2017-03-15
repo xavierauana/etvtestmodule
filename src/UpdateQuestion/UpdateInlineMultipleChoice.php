@@ -38,10 +38,11 @@ class UpdateInlineMultipleChoice implements UpdateOperatorInterface
                 $subQuestion->choices()->findOrFail($choiceData['id'])->update([
                     'content' => $choiceData['content']
                 ]);
-                if($choiceData['is_corrected'])
+                if ($choiceData['is_corrected']) {
                     $subQuestion->answer->update([
-                        'content'=>$choiceData['id']
+                        'content' => $choiceData['id']
                     ]);
+                }
             }
         }
     }
@@ -53,9 +54,10 @@ class UpdateInlineMultipleChoice implements UpdateOperatorInterface
         $question = Question::findOrFail($data['id']);
 
         $question->update([
-            'prefix'  => $data['prefix'],
-            'content' => $data['content'],
-            'is_active' => $data['is_active'],
+            'prefix'      => $data['prefix'],
+            'content'     => $data['content'],
+            'is_active'   => $data['is_active'],
+            'order'       => $data['order'],
             'page_number' => $data['page_number'],
         ]);
 
