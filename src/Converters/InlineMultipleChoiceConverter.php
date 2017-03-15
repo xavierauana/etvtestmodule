@@ -8,6 +8,7 @@
 namespace Anacreation\Etvtest\Converters;
 
 
+use Anacreation\Etvtest\Factory\QuestionCreatorFactory;
 use Anacreation\Etvtest\Models\Question;
 use Illuminate\Support\Collection;
 
@@ -28,14 +29,21 @@ class InlineMultipleChoiceConverter extends AbstractConverter
     }
 
     private function getSubQuestions(Collection $subQuestions) {
-        $questionsArray = [];
-        foreach ($subQuestions as $question){
-            $className = "Anacreation\\Etvtest\\Converters\\".$question->QuestionType->code."Converter";
 
-            /** @var \Anacreation\Etvtest\Converters\ConverterInterface $converter */
-            $converter = app($className);
+        $converter = QuestionCreatorFactory::make($subQuestions->first());
+        return $converter->convert($subQuestions);
+
+        $questionsArray = [];
+        foreach ($subQuestions as $question) {
+
+            //            $className = "Anacreation\\Etvtest\\Converters\\".$question->QuestionType->code."Converter";
+            //            /** @var \Anacreation\Etvtest\Converters\ConverterInterface $converter */
+            //            $converter = app($className);
+
+            $converter = QuestionCreatorFactory::make($question);
             $questionsArray[] = $converter->convert($question);
         }
+
         return $questionsArray;
     }
 }

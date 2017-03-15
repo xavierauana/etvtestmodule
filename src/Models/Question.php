@@ -42,6 +42,6 @@ class Question extends Model
     }
 
     public function scopeOrdered($query): Builder {
-        return $query->orderBy(['order'=>'asc', 'created_at'=>'desc']);
+        return $query->orderBy('order');
     }
 }

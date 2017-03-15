@@ -20,7 +20,6 @@ class InlineMultipleChoiceConverter extends AbstractConverter
     protected function _convert($subject) {
         $data = [];
 
-        $data['is_active'] = !!$subject->is_active;
         $data['sub_questions'] = (new SingleMultipleChoiceConverter())->convert($subject->subQuestions);
 
         return $data;
