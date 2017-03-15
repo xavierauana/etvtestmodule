@@ -2,8 +2,8 @@
 
 namespace Anacreation\Etvtest\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Schema\Builder;
 
 class Question extends Model
 {
