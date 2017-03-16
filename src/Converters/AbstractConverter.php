@@ -38,6 +38,7 @@ abstract class AbstractConverter implements ConverterInterface
         $data['prefix'] = $subject->prefix;
         $data['content'] = $subject->content;
         $data['order'] = $subject->order;
+        $data['is_active'] = $subject->is_active;
         $data['page_number'] = $subject->page_number;
         $data['question_type_id'] = $subject->QuestionType->id;
         return $data;
