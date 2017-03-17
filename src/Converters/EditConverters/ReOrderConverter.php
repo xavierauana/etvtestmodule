@@ -21,7 +21,7 @@ class ReOrderConverter extends AbstractConverter
     protected function _convert($subject) {
         $data = [];
 
-        $data['answer'] = $subject->answer->content;
+        $data['answer'] = $subject->answer? $subject->answer->content : null;
         $data['choices'] = (new ChoiceConverter())->convert($subject->choices);
         $data['is_active'] = !!$subject->is_active;
 
