@@ -24,7 +24,7 @@ class UpdateReOrder implements UpdateOperatorInterface
         $question->update($data);
 
         $this->updateChoices($question, $data['choices']);
-        
+
         $this->updateAnswer($question, $data['answer']);
 
         return $question;
@@ -40,7 +40,15 @@ class UpdateReOrder implements UpdateOperatorInterface
     }
 
     private function updateAnswer(Question $question, array $answer): void {
-        $question->answer->content = $answer;
+        if ($question->answer) {
+            $question->answer->content = $answer;
+            $question->answer->save();
+        } else {
+            $question->answer()->create([
+                'content' => $answer
+            ]);
+        }
+
     }
 
 
