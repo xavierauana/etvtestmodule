@@ -20,7 +20,6 @@ class UpdateSingleFillInBlanks implements UpdateOperatorInterface
      * @return \Anacreation\Etvtest\Models\Question
      */
     public function update(Question $question, array $data): Question {
-        // TODO: Implement update() method.
         $questionData = [
             "content"     => $data['content'],
             "prefix"      => $data['prefix'],
