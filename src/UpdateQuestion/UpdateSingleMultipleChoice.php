@@ -8,25 +8,39 @@
 namespace Anacreation\Etvtest\UpdateQuestion;
 
 
-use Anacreation\Etvtest\Models\Choice;
 use Anacreation\Etvtest\Models\Question;
 
 class UpdateSingleMultipleChoice extends AbstractMultipleChoiceUpdateOperator
 {
-    protected function updateQuestion(Question $question, $content) {
-        $question->update($content);
-    }
+    /**
+     * @param \Anacreation\Etvtest\Models\Question $question
+     * @param array                                $choices
+     * @return array
+     */
+    protected function updateChoices(Question $question, $choices): array {
 
-    protected function updateChoices(Question $question, $choices) {
+        $answerId = [];
+
         foreach ($choices as $choiceData) {
-            $question->choices()->findOrFail($choiceData['id'])->update($choiceData);
+            if ($choiceData['type'] == '_db') {
+                if ($choiceData['active']) {
+                    $question->choices()->findOrFail($choiceData['id'])->update($choiceData);
+                    if ($choiceData['is_corrected']) {
+                        $answerId[0] = $choiceData['id'];
+                    }
+                } else {
+                    $question->choices()->findOrFail($choiceData['id'])->delete();
+                }
+            } elseif ($choiceData['type'] == 'new') {
+                $newChoice = $question->choices()->create($choiceData);
+                if ($choiceData['is_corrected']) {
+                    $answerId[0] = $newChoice->id;
+                }
+            }
         }
 
+        return $answerId;
+
     }
 
-    protected function updateAnswer(Question $question, $correctChoiceId) {
-        $question->answer->update([
-            'content' => $correctChoiceId
-        ]);
-    }
 }

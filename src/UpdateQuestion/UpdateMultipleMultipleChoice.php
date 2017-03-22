@@ -14,28 +14,29 @@ class UpdateMultipleMultipleChoice extends AbstractMultipleChoiceUpdateOperator
 {
     /**
      * @param $choices
+     * @return array
      */
-    protected function updateChoices(Question $question, $choices) {
+    protected function updateChoices(Question $question, $choices): array {
+        $answerIds = [];
+
         foreach ($choices as $choiceData) {
-            $question->choices()->findOrFail($choiceData['id'])->update($choiceData);
+            if ($choiceData['type'] == '_db') {
+                if ($choiceData['active']) {
+                    $question->choices()->findOrFail($choiceData['id'])->update($choiceData);
+                    if ($choiceData['is_corrected']) {
+                        $answerIds[] = $choiceData['id'];
+                    }
+                } else {
+                    $question->choices()->findOrFail($choiceData['id'])->delete();
+                }
+            } elseif ($choiceData['type'] == 'new') {
+                $newChoice = $question->choices()->create($choiceData);
+                if ($choiceData['is_corrected']) {
+                    $answerIds[] = $newChoice->id;
+                }
+            }
         }
-    }
 
-    /**
-     * @param \Anacreation\Etvtest\Models\Question $question
-     * @param                                      $correctChoiceIds
-     */
-    protected function updateAnswer(Question $question, $correctChoiceIds) {
-        $question->answer->update([
-            'content' => $correctChoiceIds
-        ]);
-    }
-
-    /**
-     * @param \Anacreation\Etvtest\Models\Question $question
-     * @param                                      $content
-     */
-    protected function updateQuestion(Question $question, $content) {
-        $question->update($content);
+        return $answerIds;
     }
 }

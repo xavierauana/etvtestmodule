@@ -17,21 +17,4 @@ class UpdateMultipleChoiceHelpers
             'prefix'    => $data['prefix'],
         ];
     }
-    public static function ParseDataForAnswersAndChoices($data): array  {
-        $correctChoiceId = [];
-
-        $choices = array_map(function ($choice) use (&$correctChoiceId) {
-            if ($choice['is_corrected']) {
-                $correctChoiceId[] = $choice['id'];
-            }
-
-            return [
-                "id"           => $choice['id'],
-                "content"      => $choice['content'],
-                "is_corrected" => $choice['is_corrected'],
-            ];
-        }, $data['choices']);
-
-        return [$correctChoiceId, $choices];
-    }
 }
