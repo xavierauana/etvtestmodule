@@ -29,19 +29,13 @@ class InlineMultipleChoiceConverter extends AbstractConverter
     }
 
     private function getSubQuestions(Collection $subQuestions) {
-
-        $converter = QuestionConverterFactory::make($subQuestions->first());
-        return $converter->convert($subQuestions);
-
         $questionsArray = [];
-        foreach ($subQuestions as $question) {
 
-            //            $className = "Anacreation\\Etvtest\\Converters\\".$question->QuestionType->code."Converter";
-            //            /** @var \Anacreation\Etvtest\Converters\ConverterInterface $converter */
-            //            $converter = app($className);
+        if($subQuestions->count() > 0){
 
-            $converter = QuestionConverterFactory::make($question);
-            $questionsArray[] = $converter->convert($question);
+            $converter = QuestionConverterFactory::make($subQuestions->first());
+
+            return $converter->convert($subQuestions);
         }
 
         return $questionsArray;
