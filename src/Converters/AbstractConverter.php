@@ -18,15 +18,18 @@ abstract class AbstractConverter implements ConverterInterface
      */
     public function convert($subject): array {
         $data = [];
-        if ($subject instanceof Collection) {
-            if ($subject->count() > 0) {
-                $subjects = $subject;
-                foreach ($subjects as $subject) {
-                    $data[] = $this->getCommonAttributes($subject, $this->_convert($subject));
+
+        if ($subject != null) {
+            if ($subject instanceof Collection) {
+                if ($subject->count() > 0) {
+                    $subjects = $subject;
+                    foreach ($subjects as $subject) {
+                        $data[] = $this->getCommonAttributes($subject, $this->_convert($subject));
+                    }
                 }
+            } else {
+                $data[] = $this->getCommonAttributes($subject, $this->_convert($subject));
             }
-        } else {
-            $data[] = $this->getCommonAttributes($subject, $this->_convert($subject));
         }
 
         return $data;
@@ -41,6 +44,7 @@ abstract class AbstractConverter implements ConverterInterface
         $data['is_active'] = $subject->is_active;
         $data['page_number'] = $subject->page_number;
         $data['question_type_id'] = $subject->QuestionType->id;
+
         return $data;
     }
 

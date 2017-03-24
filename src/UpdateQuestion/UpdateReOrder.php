@@ -23,33 +23,51 @@ class UpdateReOrder implements UpdateOperatorInterface
 
         $question->update($data);
 
-        $this->updateChoices($question, $data['choices']);
+        $choiceIds = $this->updateChoices($question, $data['choices']);
 
-        $this->updateAnswer($question, $data['answer']);
+        $this->updateAnswer($question, $data['answer'], $choiceIds);
 
         return $question;
     }
 
-    private function updateChoices(Question $question, $choicesArray): void {
-        foreach ($choicesArray as $choice) {
-            $theChoice = $question->find($choice['id']);
-            if ($theChoice) {
-                $theChoice->update($choice);
+    private function updateChoices(Question $question, $choicesArray): array {
+
+
+        $choiceIds = [];
+
+        foreach ($choicesArray as $choiceData) {
+            if ($choiceData['type'] == '_db') {
+                if ($choiceData['active']) {
+                    $question->choices()->findOrFail($choiceData['id'])->update($choiceData);
+                    $choiceIds[] = $choiceData['id'];
+                } else {
+                    $question->choices()->findOrFail($choiceData['id'])->delete();
+                }
+            } elseif ($choiceData['type'] == 'new') {
+                $newChoice = $question->choices()->create($choiceData);
+                $choiceIds[] = $newChoice->id;
             }
         }
+
+        return $choiceIds;
     }
 
-    private function updateAnswer(Question $question, array $answer): void {
+    private function updateAnswer(Question $question, array $answer, array $choiceIds): void {
+
+        $sequenceIds = [];
+        foreach ($answer as $sequence ) {
+            $sequenceIds[] = $choiceIds[$sequence - 1];
+        }
+
         if ($question->answer) {
-            $question->answer->content = $answer;
+            $question->answer->content = $sequenceIds;
             $question->answer->save();
         } else {
             $question->answer()->create([
-                'content' => $answer
+                'content' => $sequenceIds
             ]);
         }
 
     }
-
 
 }

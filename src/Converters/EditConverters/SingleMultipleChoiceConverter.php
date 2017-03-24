@@ -20,10 +20,9 @@ class SingleMultipleChoiceConverter extends AbstractConverter
      */
     protected function _convert($subject) {
         $data = [];
-
         $data['choices'] = $this->createChoiceWithCorrectnessIndicator($subject);
         $data['is_active'] = !!$subject->is_active;
-
+        $data['answer'] = $subject->answer->content;
         return $data;
     }
 

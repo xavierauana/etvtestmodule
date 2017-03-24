@@ -12,11 +12,10 @@ use Anacreation\Etvtest\Models\Question;
 
 class UpdateSingleMultipleChoice extends AbstractMultipleChoiceUpdateOperator
 {
-    /**
-     * @param \Anacreation\Etvtest\Models\Question $question
-     * @param array                                $choices
-     * @return array
-     */
+    protected function updateQuestion(Question $question, $content) {
+        $question->update($content);
+    }
+
     protected function updateChoices(Question $question, $choices): array {
 
         $answerId = [];
@@ -42,5 +41,4 @@ class UpdateSingleMultipleChoice extends AbstractMultipleChoiceUpdateOperator
         return $answerId;
 
     }
-
 }

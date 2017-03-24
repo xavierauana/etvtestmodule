@@ -14,9 +14,8 @@ class UpdateMultipleMultipleChoice extends AbstractMultipleChoiceUpdateOperator
 {
     /**
      * @param $choices
-     * @return array
      */
-    protected function updateChoices(Question $question, $choices): array {
+    protected function updateChoices(Question $question, $choices):array {
         $answerIds = [];
 
         foreach ($choices as $choiceData) {
@@ -36,7 +35,7 @@ class UpdateMultipleMultipleChoice extends AbstractMultipleChoiceUpdateOperator
                 }
             }
         }
-
         return $answerIds;
     }
+
 }
