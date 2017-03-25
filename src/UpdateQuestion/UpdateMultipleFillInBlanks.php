@@ -9,6 +9,7 @@ namespace Anacreation\Etvtest\UpdateQuestion;
 
 
 use Anacreation\Etvtest\Contracts\UpdateOperatorInterface;
+use Anacreation\Etvtest\Models\Choice;
 use Anacreation\Etvtest\Models\Question;
 
 class UpdateMultipleFillInBlanks implements UpdateOperatorInterface
@@ -25,18 +26,32 @@ class UpdateMultipleFillInBlanks implements UpdateOperatorInterface
             "content"       => $data['content'],
             "prefix"        => $data['prefix'],
             "page_number"   => $data['page_number'],
-            "order"         => $data['order'],
             "is_active"     => $data['is_active'],
+            "is_ordered"    => $data['is_ordered'],
             "is_fractional" => $data['is_fractional'],
         ];
 
         $question->update($questionData);
 
+        $answerIds = $this->updateChoices($question, $data);
+
+        $this->updateAnswer($question, $answerIds, $questionData);
+
+        return $question;
+    }
+
+    /**
+     * @param \Anacreation\Etvtest\Models\Question $question
+     * @param array                                $data
+     * @return array
+     */
+    private function updateChoices(Question $question, array $data): array {
         $choiceData = $data['choices'];
 
         $answerIds = [];
 
         foreach ($choiceData as $choicesDatum) {
+            /** @var Choice $choice */
             $choice = $question->choices()->findOrFail($choicesDatum['id']);
             $choice->update([
                 'content' => $choicesDatum['content']
@@ -44,10 +59,17 @@ class UpdateMultipleFillInBlanks implements UpdateOperatorInterface
             $answerIds[] = $choicesDatum['id'];
         }
 
-        $question->answer->update([
-            'content' => $answerIds
-        ]);
+        return $answerIds;
+    }
 
-        return $question;
+    /**
+     * @param \Anacreation\Etvtest\Models\Question $question
+     * @param                                      $answerIds
+     * @param                                      $questionData
+     */
+    private function updateAnswer(Question $question, $answerIds, $questionData) {
+        $question->answer->content = $answerIds;
+        $question->answer->is_ordered = $questionData['is_ordered'];
+        $question->answer->save();
     }
 }
