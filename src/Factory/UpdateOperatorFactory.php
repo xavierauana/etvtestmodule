@@ -10,7 +10,6 @@ namespace Anacreation\Etvtest\Factory;
 
 use Anacreation\Etvtest\Contracts\UpdateOperatorInterface;
 use Anacreation\Etvtest\Models\Question;
-use Illuminate\Support\Facades\App;
 
 class UpdateOperatorFactory
 {
@@ -22,7 +21,8 @@ class UpdateOperatorFactory
     public static function make(Question $question): UpdateOperatorInterface {
         $questionType = $question->QuestionType;
         $prefix = "\\Anacreation\\Etvtest\\UpdateQuestion\\Update";
-        $operator = App::make($prefix . $questionType->code);
+        $operator = resolve($prefix . $questionType->code, ['question' => $question]);
+
         return $operator;
     }
 }

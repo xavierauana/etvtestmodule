@@ -59,7 +59,6 @@ class UpdateInlineMultipleChoice implements UpdateOperatorInterface
 
     private function updateSubQuestion($data): void {
 
-
         foreach ($data['sub_questions'] as $sub_question_data) {
 
             if ($this->isExistingSubQuestion($sub_question_data)) {
