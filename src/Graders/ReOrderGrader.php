@@ -15,15 +15,21 @@ class ReOrderGrader implements GraderInterface
 
     /**
      * @param \Anacreation\Etvtest\Models\Question $question
-     * @param array         $answer
+     * @param array                                $answer
      * @return array
      */
     public function grade(Question $question, array $answers) {
         $correct = true;
-        $answerObject =  $question->answer;
+        $answerObject = $question->answer;
 
-        foreach ($answerObject->content as $index=>$answer){
-            if($answer != $answers[$index]) $correct = false;
+        if ($answerObject == null) {
+            throw new \Exception("no answer!");
+        }
+
+        foreach ($answerObject->content as $index => $answer) {
+            if ($answer != $answers[$index]) {
+                $correct = false;
+            }
         }
 
         return [$correct, $answerObject->content];
