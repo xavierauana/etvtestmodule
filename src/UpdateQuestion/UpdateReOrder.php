@@ -52,19 +52,20 @@ class UpdateReOrder implements UpdateOperatorInterface
         return $choiceIds;
     }
 
-    private function updateAnswer(Question $question, array $answer, array $choiceIds): void {
+    private function updateAnswer(Question $question, array $correctedSequenceIndices, array $choiceIds): void {
 
-        $sequenceIds = [];
-        foreach ($answer as $sequence ) {
-            $sequenceIds[] = $choiceIds[$sequence - 1];
+        $sequenceChoiceIds = [];
+        foreach ($correctedSequenceIndices as $index) {
+            $sequenceChoiceIds[] = $choiceIds[$index - 1];
         }
 
         if ($question->answer) {
-            $question->answer->content = $sequenceIds;
-            $question->answer->save();
+            $question->answer()->update([
+                'content' => $sequenceChoiceIds
+            ]);
         } else {
             $question->answer()->create([
-                'content' => $sequenceIds
+                'content' => $sequenceChoiceIds
             ]);
         }
 

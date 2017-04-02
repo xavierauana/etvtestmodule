@@ -18,7 +18,7 @@ class Comprehension implements CreateQuestionInterface
 
     /**
      * @param array     $inputs
-     * @param \App\Test $test
+     * @param Test $test
      * @return Question
      */
     public function create(array $inputs, Test $test) {
