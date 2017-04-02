@@ -10,17 +10,19 @@ namespace Anacreation\Etvtest\Services;
 
 use Anacreation\Etvtest\Graders\GraderManger;
 use Anacreation\Etvtest\Models\Question;
+use Anacreation\Etvtest\Models\Test;
 
 class GradingService
 {
     public $result = [];
     public $summary = ['correct' => 0];
 
-    public function grade(array $answers) {
+    public function grade(Test $test, array $answers) {
 
         foreach ($answers as $answer) {
 
-            $question = Question::findOrFail($answer['id']);
+            /** @var Question $question */
+            $question = $test->questions()->findOrFail($answer['id']);
 
             $answerArray = is_array($answer['answer']) ? $answer['answer'] : [$answer['answer']];
             list($is_correct, $correct_answer) = GraderManger::grade($question, $answerArray);

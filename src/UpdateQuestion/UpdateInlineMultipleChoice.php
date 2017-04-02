@@ -9,6 +9,8 @@ namespace Anacreation\Etvtest\UpdateQuestion;
 
 
 use Anacreation\Etvtest\Contracts\UpdateOperatorInterface;
+use Anacreation\Etvtest\Models\Answer;
+use Anacreation\Etvtest\Models\Choice;
 use Anacreation\Etvtest\Models\Question;
 
 class UpdateInlineMultipleChoice implements UpdateOperatorInterface
@@ -29,23 +31,6 @@ class UpdateInlineMultipleChoice implements UpdateOperatorInterface
 
     }
 
-    private function updateSubQuestion(Question $question, $data): void {
-
-        foreach ($data['sub_questions'] as $sub_question) {
-
-            if ($this->hasQuestionId($sub_question)) {
-
-                $this->updateExistingSubQuestion($question, $sub_question);
-
-            } else {
-
-                $newSubQuestion = $this->createSubQuestion($question, $sub_question);
-                $this->updateSubQuestionChoices($newSubQuestion, $sub_question);
-            }
-
-        }
-    }
-
     /**
      * @param array $data
      */
@@ -62,38 +47,22 @@ class UpdateInlineMultipleChoice implements UpdateOperatorInterface
         return $question;
     }
 
-    private function createSubQuestion(Question $question, $data): Question {
-        /* @var Question $newSubQuestion */
-        $newSubQuestion = $question->subQuestions()->create($data);
+    // Sub Questions
 
-        return $newSubQuestion;
-    }
+    private function updateSubQuestion(Question $question, $data): void {
 
-    private function updateSubQuestionChoices($newSubQuestion, $sub_question) {
-        foreach ($sub_question['choices'] as $choiceData) {
-            $this->createChoice($newSubQuestion, $choiceData);
+        foreach ($data['sub_questions'] as $sub_question_data) {
+
+            if ($this->isExistingSubQuestion($sub_question_data)) {
+
+                $this->updateExistingSubQuestion($question, $sub_question_data);
+
+            } else {
+
+                $this->createSubQuestion($question, $sub_question_data);
+
+            }
         }
-    }
-
-    /**
-     * @param $subQuestion
-     * @param $choiceData
-     */
-    private function createChoice(Question $subQuestion, array $choiceData): void {
-        $subQuestion->choices()->create($choiceData);
-        if ($choiceData['is_corrected']) {
-            $subQuestion->answer()->create([
-                'content' => $choiceData['id']
-            ]);
-        }
-    }
-
-    /**
-     * @param $sub_question
-     * @return bool
-     */
-    private function hasQuestionId($sub_question): bool {
-        return !!$sub_question['id'];
     }
 
     /**
@@ -104,19 +73,74 @@ class UpdateInlineMultipleChoice implements UpdateOperatorInterface
 
         $subQuestion = $question->subQuestions()->findOrFail($sub_question['id']);
 
-        foreach ($sub_question['choices'] as $choiceData) {
-            if ($this->isActiveChoice($choiceData)) {
+        $correctedIds = $this->updateSubQuestionChoice($sub_question['choices'], $subQuestion);
+
+        $this->updateQuestionAnswer($subQuestion, $correctedIds);
+    }
+
+    /**
+     * @param \Anacreation\Etvtest\Models\Question $question
+     * @param                                      $data
+     * @return \Anacreation\Etvtest\Models\Question
+     */
+    private function createSubQuestion(Question $question, $data): Question {
+        /* @var Question $newSubQuestion */
+        $newSubQuestion = $question->subQuestions()->create($data);
+
+        $correctedIds = $this->updateSubQuestionChoice($data['choices'], $newSubQuestion);
+
+        $this->updateQuestionAnswer($newSubQuestion, $correctedIds);
+
+        return $newSubQuestion;
+    }
+
+    private function deleteSubQuestion($subQuestion, $choiceData): void {
+        $subQuestion->choices()->findOrFail($choiceData['id'])->delete();
+    }
+
+    /**
+     * @param $choiceData
+     * @param $subQuestion
+     * @param $correctedIds
+     * @return array
+     */
+
+    // Choices
+
+    private function updateSubQuestionChoice($choicesData, $subQuestion): array {
+
+        $correctedIds = [];
+
+        foreach ($choicesData as $choiceData) {
+
+            if ($this->isActiveExistingChoice($choiceData)) {
                 $this->updateExistingChoice($subQuestion, $choiceData);
             } elseif ($this->needsToDelete($choiceData)) {
                 $this->deleteChoice($subQuestion, $choiceData);
-            } else {
-                $this->createChoice($subQuestion, $choiceData);
+            } elseif ($this->needsToCreateChoice($choiceData)) {
+                $newChoice = $this->createChoice($subQuestion, $choiceData);
+                $choiceData['id'] = $newChoice->id;
+            }
+
+            if ($choiceData['active'] and $choiceData['is_corrected']) {
+                $correctedIds[] = $choiceData['id'];
             }
         }
+
+
+        return $correctedIds;
     }
 
-    private function isActiveChoice($choiceData): bool {
-        return $choiceData['id'] && $choiceData['active'];
+    /**
+     * @param $subQuestion
+     * @param $choiceData
+     */
+    private function createChoice(Question $subQuestion, array $choiceData): Choice {
+
+        /** @var Choice $newChoice */
+        $newChoice = $subQuestion->choices()->create($choiceData);
+
+        return $newChoice;
     }
 
     /**
@@ -125,15 +149,6 @@ class UpdateInlineMultipleChoice implements UpdateOperatorInterface
      */
     private function updateExistingChoice($subQuestion, $choiceData): void {
         $subQuestion->choices()->findOrFail($choiceData['id'])->update($choiceData);
-        if ($choiceData['is_corrected']) {
-            $subQuestion->answer->update([
-                'content' => $choiceData['id']
-            ]);
-        }
-    }
-
-    private function needsToDelete($choiceData): bool {
-        return $choiceData['id'] && !$choiceData['active'];
     }
 
     /**
@@ -143,4 +158,47 @@ class UpdateInlineMultipleChoice implements UpdateOperatorInterface
     private function deleteChoice($subQuestion, $choiceData): void {
         $subQuestion->choices()->findOrFail($choiceData['id'])->delete();
     }
+
+    // Answer
+
+    private function updateQuestionAnswer(Question $question, $correctedIds): Answer {
+
+        $answer = $question->answer;
+
+        if ($answer) {
+            $answer->update([
+                'content' => $correctedIds
+            ]);
+        } else {
+            $answer = $question->answer()->create([
+                'content' => $correctedIds
+            ]);
+        }
+
+        return $answer;
+    }
+
+
+    // Utils
+
+    /**
+     * @param $sub_question
+     * @return bool
+     */
+    private function isExistingSubQuestion($sub_question): bool {
+        return !!$sub_question['id'];
+    }
+
+    private function isActiveExistingChoice($choiceData): bool {
+        return $choiceData['id'] && $choiceData['active'];
+    }
+
+    private function needsToDelete($choiceData): bool {
+        return $choiceData['id'] && !$choiceData['active'];
+    }
+
+    private function needsToCreateChoice($choiceData): bool {
+        return !$choiceData['id'] and $choiceData['active'];
+    }
+
 }
