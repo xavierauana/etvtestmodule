@@ -1,0 +1,7 @@
+Guards are going to verify the input json is match with the desirable array format for Update Operation
+
+Where should guards being use?
+- should be in controller for verify request
+- Guards should be validator
+
+When put guards in packages, then we can test package api
