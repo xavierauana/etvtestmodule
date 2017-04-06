@@ -12,7 +12,7 @@ use Anacreation\Etvtest\Models\Question;
 
 class SingleMultipleChoiceGrader implements GraderInterface
 {
-
+    use GraderTrait;
     /**
      * @param \Anacreation\Etvtest\Models\Question $question
      * @param array         $answer
@@ -21,6 +21,7 @@ class SingleMultipleChoiceGrader implements GraderInterface
     public function grade(Question $question, array $answer) {
         $correct = true;
         $answerObject =  $question->answer;
+        if($this->isEmptyAnswer($answer)) return [false, $answerObject->content];
         $result = array_diff($answerObject->content, $answer);
         if(count($result) > 0) $correct = false;;
         return [$correct, $answerObject->content];

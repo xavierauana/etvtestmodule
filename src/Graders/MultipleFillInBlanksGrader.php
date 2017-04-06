@@ -13,7 +13,7 @@ use Anacreation\Etvtest\Models\Question;
 
 class MultipleFillInBlanksGrader implements GraderInterface
 {
-
+    use GraderTrait;
     /**
      * @param \Anacreation\Etvtest\Models\Question $question
      * @param array         $answer
@@ -23,6 +23,9 @@ class MultipleFillInBlanksGrader implements GraderInterface
 
         $answerObject =  $question->answer;
         $answerStringArray = [];
+
+        if($this->isEmptyAnswer($answers)) return [false, $answerObject->content];
+
 
         foreach ($answerObject->content as $choiceId){
             $answerStringArray[] = Choice::findOrFail($choiceId)->content;

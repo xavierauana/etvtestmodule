@@ -12,7 +12,7 @@ use Anacreation\Etvtest\Models\Question;
 
 class ReOrderGrader implements GraderInterface
 {
-
+    use GraderTrait;
     /**
      * @param \Anacreation\Etvtest\Models\Question $question
      * @param array                                $answer
@@ -21,6 +21,11 @@ class ReOrderGrader implements GraderInterface
     public function grade(Question $question, array $answers) {
         $correct = true;
         $answerObject = $question->answer;
+
+        if($this->isEmptyAnswer($answers)){
+            return [false, $answerObject->content];
+        }
+
 
         if ($answerObject == null) {
             throw new \Exception("no answer!");

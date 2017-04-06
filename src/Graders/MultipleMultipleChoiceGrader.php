@@ -13,7 +13,7 @@ use Illuminate\Pagination\Paginator;
 
 class MultipleMultipleChoiceGrader implements GraderInterface
 {
-
+    use GraderTrait;
     /**
      * @param \Anacreation\Etvtest\Models\Question $question
      * @param array         $answer
@@ -22,6 +22,8 @@ class MultipleMultipleChoiceGrader implements GraderInterface
     public function grade(Question $question, array $answer) {
         $correct = true;
         $answerObject =  $question->answer;
+
+        if($this->isEmptyAnswer($answer)) return [false, $answerObject->content];
 
         if($answerObject->is_required_all){
             $result = array_diff($answer, $answerObject->content);
