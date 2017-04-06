@@ -19,16 +19,24 @@ class GradingService
 
     public function grade(Test $test, array $answers) {
 
-        foreach ($answers as $answer) {
+        foreach ($test->questions()->whereIsActive(1)->get() as $question) {
+            $this->_grade($question, $answers);
+        }
+    }
 
-            /** @var Question $question */
-            $question = $test->questions()->findOrFail($answer['id']);
+    private function _grade(Question $question, array $answers): void {
+        if ($question->subQuestions->count() > 0) {
+            foreach ($question->subQuestions as $subQuestion) {
+                $this->_grade($subQuestion, $answers);
+            }
+        } else {
+            $answerArray = $this->getTheAnswerArray($question, $answers);
 
-            $answerArray = is_array($answer['answer']) ? $answer['answer'] : [$answer['answer']];
             list($is_correct, $correct_answer) = GraderManger::grade($question, $answerArray);
 
             $this->constructData($is_correct, $question, $answerArray, $correct_answer);
         }
+
     }
 
     /**
@@ -45,5 +53,23 @@ class GradingService
             'is_correct'     => $is_correct,
             'correct_answer' => $correct_answer,
         ];
+    }
+
+    /**
+     * @param \Anacreation\Etvtest\Models\Question $question
+     * @param array                                $answers
+     * @return array|mixed|answer
+     */
+    private function getTheAnswerArray(Question $question, array $answers) {
+
+        $answerArray = array_filter($answers, function ($answer) use ($question) {
+            return $answer['id'] == $question->id;
+        });
+        if (count($answerArray) > 0) {
+            $answerArray = array_shift($answerArray);
+            $answerArray = is_array($answerArray['answer']) ? $answerArray['answer'] : [$answerArray['answer']];
+        }
+
+        return $answerArray;
     }
 }
