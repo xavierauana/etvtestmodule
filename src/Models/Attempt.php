@@ -16,7 +16,7 @@ class Attempt extends Model
         $this->attributes['attempt'] = serialize($value);
     }
 
-    public function getAttemptAttribute() {
-        return unserialize($this->attempt);
+    public function getAttemptAttribute($value) {
+        return unserialize($value);
     }
 }
