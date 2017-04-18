@@ -8,10 +8,11 @@
 namespace Anacreation\Etvtest\Contracts;
 
 use  Anacreation\Etvtest\Models\Test;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 trait TestableTraits
 {
-    public function tests() {
+    public function tests(): Relation {
         return $this->morphMany(Test::class, 'testable');
     }
 }
