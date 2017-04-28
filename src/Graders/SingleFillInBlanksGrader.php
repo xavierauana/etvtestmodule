@@ -24,12 +24,12 @@ class SingleFillInBlanksGrader implements GraderInterface
         $answerObject =  $question->answer;
         $answerStringArray = [];
 
-        if($this->isEmptyAnswer($answer)){
-            return [false, $answerObject->content];
-        }
-
         foreach ($answerObject->content as $choiceId){
             $answerStringArray[] = Choice::findOrFail($choiceId)->content;
+        }
+
+        if($this->isEmptyAnswer($answer)){
+            return [false, $answerStringArray];
         }
 
         $result = array_intersect($answerStringArray, $answer);
