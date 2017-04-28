@@ -25,9 +25,11 @@ class InlineFillInBlanksConverter extends AbstractConverter
 
     private function getSubQuestions(Collection $subQuestions) {
         $questionsArray = [];
-        foreach ($subQuestions as $question) {
-            $converter = QuestionConverterFactory($question);
-            $questionsArray[] = $converter->convert($question);
+        if ($subQuestions->count() > 0) {
+
+            $converter = QuestionConverterFactory($subQuestions->first());
+
+            return $converter->convert($subQuestions);
         }
 
         return $questionsArray;
