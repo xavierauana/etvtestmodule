@@ -30,7 +30,7 @@ class UpdateSingleFillInBlanks implements UpdateOperatorInterface
         if (isset($data['order'])) {
             $questionData['order'] = $data['order'];
         }
-        
+
         $question->update($questionData);
 
         $choiceData = $data['choices'][0];
