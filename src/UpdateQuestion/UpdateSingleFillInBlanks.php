@@ -24,10 +24,13 @@ class UpdateSingleFillInBlanks implements UpdateOperatorInterface
             "content"     => $data['content'],
             "prefix"      => $data['prefix'],
             "is_active"   => $data['is_active'],
-            "order"       => $data['order'],
             "page_number" => $data['page_number'],
         ];
 
+        if (isset($data['order'])) {
+            $questionData['order'] = $data['order'];
+        }
+        
         $question->update($questionData);
 
         $choiceData = $data['choices'][0];
