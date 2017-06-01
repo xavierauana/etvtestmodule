@@ -14,27 +14,38 @@ use Anacreation\Etvtest\Models\Question;
 class SingleFillInBlanksGrader implements GraderInterface
 {
     use GraderTrait;
+
     /**
      * @param \Anacreation\Etvtest\Models\Question $question
-     * @param array         $answer
+     * @param array                                $answer
      * @return array
      */
     public function grade(Question $question, array $answer) {
         $correct = true;
-        $answerObject =  $question->answer;
+        $answerObject = $question->answer;
         $answerStringArray = [];
 
-        foreach ($answerObject->content as $choiceId){
+        $answer = $this->cleanUserInputAnswerArray($answer);
+
+        foreach ($answerObject->content as $choiceId) {
             $answerStringArray[] = Choice::findOrFail($choiceId)->content;
         }
 
-        if($this->isEmptyAnswer($answer)){
+        if ($this->isEmptyAnswer($answer)) {
             return [false, $answerStringArray];
         }
 
         $result = array_intersect($answerStringArray, $answer);
-        if(count($result) <= 0) $correct = false;;
-        return [$correct, $answerStringArray];
+        if (count($result) <= 0) {
+            $correct = false;
+        };
 
+        return [$correct, $answerStringArray];
+    }
+
+    private function cleanUserInputAnswerArray(array $answers): array {
+        return array_map(function ($item) {
+            return trim($item);
+        }, $answers);
     }
 }

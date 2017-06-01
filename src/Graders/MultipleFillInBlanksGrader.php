@@ -22,8 +22,9 @@ class MultipleFillInBlanksGrader implements GraderInterface
      */
     public function grade(Question $question, array $answers) {
 
-        $answerObject = $question->answer;
         $answerStringArray = [];
+        $answerObject = $question->answer;
+        $answers = $this->cleanUserInputAnswerArray($answers);
 
         foreach ($answerObject->content as $choiceId) {
             $answerStringArray[] = Choice::findOrFail($choiceId)->content;
@@ -35,6 +36,12 @@ class MultipleFillInBlanksGrader implements GraderInterface
 
         return [$this->checkAnswer($answers, $answerObject, $answerStringArray), $answerStringArray];
 
+    }
+
+    private function cleanUserInputAnswerArray(array $answers): array {
+        return array_map(function ($item) {
+            return trim($item);
+        }, $answers);
     }
 
     /**
