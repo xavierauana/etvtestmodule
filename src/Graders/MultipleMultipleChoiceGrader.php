@@ -28,8 +28,9 @@ class MultipleMultipleChoiceGrader implements GraderInterface
         }
 
         if ($answerObject->is_required_all) {
-            $result = array_diff($answerObject->content, $answer);
-            if (count($result) > 0) {
+            if (count(array_diff($answerObject->content, $answer)) > 0 || count(array_diff($answer,
+                    $answerObject->content)) > 0
+            ) {
                 $correct = false;
             };
 
