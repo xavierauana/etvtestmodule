@@ -10,7 +10,9 @@ namespace Anacreation\Etvtest\Services;
 
 use Anacreation\Etvtest\Contracts\TestableInterface;
 use Anacreation\Etvtest\Models\Test;
+use App\User;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class TestServices
@@ -110,5 +112,20 @@ class TestServices
     public function updateTestById(int $id, array $data): void {
         Test::findOrFail($id)->update($data);
     }
+
+    public function userCanAccessToShowTest(User $user=null, Test $test):bool  {
+        $page = $test->testable instanceof Page ? $test->testable : $test->testable->page;
+
+        if (!$page->is_restricted) {
+            return true;
+        } else {
+            if ($user) {
+                return $user->hasPermission($page->permission->code);
+            }
+
+            return false;
+        }
+    }
+
 
 }
