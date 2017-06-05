@@ -55,7 +55,7 @@ class MultipleFillInBlanksGrader implements GraderInterface
         if ($this->requiredAllAndInOrdered($answerObject)) {
             $correct = true;
             foreach ($answerStringArray as $index => $answerString) {
-                if ($answers[$index] != $answerString) {
+                if (!isset($answers[$index]) or $answers[$index] != $answerString) {
                     $correct = false;
                 }
             }
