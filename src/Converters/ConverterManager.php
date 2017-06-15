@@ -57,8 +57,19 @@ class ConverterManager
 
         if (get_class($this->object) === Question::class) {
             return QuestionConverterFactory($this->object, $this->type);
+        } else {
+            return $this->instantiateTestConverter();
         }
+    }
 
+    /**
+     * @return mixed
+     */
+    public function getData() {
+        return $this->data;
+    }
+
+    private function instantiateTestConverter() {
         $reflection = new \ReflectionClass(get_class($this->object));
         $subject_class = $reflection->getShortName();
 
@@ -67,14 +78,7 @@ class ConverterManager
 
         $convert_full_name = $namespace . "\\" . $subject_class . "Converter";
 
-        return new $convert_full_name;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getData() {
-        return $this->data;
+        return new $convert_full_name($this->type);
     }
 
 
