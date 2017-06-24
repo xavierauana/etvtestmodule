@@ -17,9 +17,11 @@ class EtvTestServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
-    {
-        $this->loadMigrationsFrom(__DIR__.'/Migration');
+    public function boot() {
+        $this->loadMigrationsFrom(__DIR__ . '/Migration');
+        $this->publishes([
+            __DIR__ . '/Config/test.php' => config_path('test.php'),
+        ]);
     }
 
     /**
@@ -27,8 +29,7 @@ class EtvTestServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
-    {
+    public function register() {
         //
     }
 }

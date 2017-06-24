@@ -13,6 +13,6 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 trait TestableTraits
 {
     public function tests(): Relation {
-        return $this->morphMany(Test::class, 'testable');
+        return $this->morphToMany(Test::class, 'testable');
     }
 }
