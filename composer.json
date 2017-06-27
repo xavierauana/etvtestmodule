@@ -23,8 +23,8 @@
 	"symfony/dom-crawler": "3.1.*"
   },
   "autoload": {
-	"psr-4":{
-	  "Anacreation\\Etvtest\\":"src/"
+	"psr-4": {
+	  "Anacreation\\Etvtest\\": "src/"
 	},
 	"files": [
 	  "src/Helpers/Utilities.php"

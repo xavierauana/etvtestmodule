@@ -13,17 +13,23 @@ use Anacreation\Etvtest\Models\Question;
 class SingleMultipleChoiceGrader implements GraderInterface
 {
     use GraderTrait;
+
     /**
      * @param \Anacreation\Etvtest\Models\Question $question
-     * @param array         $answer
+     * @param array                                $answer
      * @return array
      */
     public function grade(Question $question, array $answer) {
         $correct = true;
-        $answerObject =  $question->answer;
-        if($this->isEmptyAnswer($answer)) return [false, $answerObject->content];
+        $answerObject = $question->answer;
+        if (count($answer) != 1) {
+            return [false, $answerObject->content];
+        }
         $result = array_diff($answerObject->content, $answer);
-        if(count($result) > 0) $correct = false;;
+        if (count($result) > 0) {
+            $correct = false;
+        };
+
         return [$correct, $answerObject->content];
     }
 }
