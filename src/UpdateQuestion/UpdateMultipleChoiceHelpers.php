@@ -12,10 +12,11 @@ class UpdateMultipleChoiceHelpers
 {
     public static function ParseDataForQuestionContent($data): array {
         return [
-            'content'   => $data['content'],
-            'is_active' => $data['is_active'],
-            'prefix'    => $data['prefix'],
-            'page_number'    => $data['page_number'],
+            'content'     => $data['content'],
+            'is_active'   => $data['is_active'],
+            'prefix'      => $data['prefix'],
+            'order'       => $data['order'],
+            'page_number' => $data['page_number'],
         ];
     }
 }
