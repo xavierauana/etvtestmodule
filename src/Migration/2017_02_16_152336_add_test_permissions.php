@@ -28,13 +28,13 @@ class AddTestPermissions extends Migration
         ];
 
         if (Schema::hasTable("permissions")) {
-            foreach ($permissions as $permission) {
-                $_permission = DB::table('permissions')->where('code', $permission['code'])->first();
-
-                if (!$_permission) {
-                    DB::table('permissions')->insert($permission);
-                }
-            }
+//            foreach ($permissions as $permission) {
+//                $_permission = DB::table('permissions')->where('code', $permission['code'])->first();
+//
+//                if (!$_permission) {
+//                    DB::table('permissions')->insert($permission);
+//                }
+//            }
         }
     }
 

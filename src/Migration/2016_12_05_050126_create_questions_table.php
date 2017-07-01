@@ -28,9 +28,9 @@ class CreateQuestionsTable extends Migration
         Schema::create('question_test', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('test_id')->unsigned();
-            $table->foreign('test_id')->references('id')->on('tests');
+            $table->foreign('test_id')->references('id')->on('tests')->onDelete('cascade');
             $table->integer('question_id')->unsigned();
-            $table->foreign('question_id')->references('id')->on('questions');
+            $table->foreign('question_id')->references('id')->on('questions')->onDelete("cascade");
             $table->unique(['test_id', 'question_id']);
             $table->timestamps();
         });

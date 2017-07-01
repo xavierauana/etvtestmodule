@@ -14,9 +14,8 @@ class CreateAnswersTable extends Migration
     public function up() {
         Schema::create('answers', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('question_id')
-                ->unsigned();
-            $table->foreign('question_id')->references('id')->on('questions');
+            $table->integer('question_id')->unsigned();
+            $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');
             $table->text('content');
             $table->boolean('is_ordered')->default(false);
             $table->boolean('is_required_all')->default(false);
