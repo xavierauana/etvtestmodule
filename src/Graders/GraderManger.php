@@ -17,5 +17,4 @@ class GraderManger
         $grader = app($class);
         return $grader->grade($question, $answers);
     }
-
 }
