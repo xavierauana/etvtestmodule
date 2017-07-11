@@ -11,12 +11,16 @@ namespace Anacreation\Etvtest\UpdateQuestion;
 class UpdateMultipleChoiceHelpers
 {
     public static function ParseDataForQuestionContent($data): array {
-        return [
+        $basic = [
             'content'     => $data['content'],
             'is_active'   => $data['is_active'],
             'prefix'      => $data['prefix'],
-            'order'       => $data['order'],
             'page_number' => $data['page_number'],
         ];
+        if (isset($data['order'])) {
+            $basic['order'] = $data['order'];
+        }
+
+        return $basic;
     }
 }
