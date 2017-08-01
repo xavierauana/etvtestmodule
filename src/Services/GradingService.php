@@ -19,7 +19,10 @@ class GradingService
 
     public function grade(Test $test, array $answers) {
 
-        foreach ($test->questions()->whereIsActive(1)->get() as $question) {
+        $questions = count($questionIds) ? $test->questions()->whereIsActive(1)->whereIn('questions.id', $questionIds)
+                                                ->get() : $test->questions()->whereIsActive(1)->get();
+
+        foreach ($questions as $question) {
             $this->_grade($question, $answers);
         }
     }
