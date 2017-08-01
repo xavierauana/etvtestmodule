@@ -17,7 +17,7 @@ class GradingService
     public $result = [];
     public $summary = ['correct' => 0];
 
-    public function grade(Test $test, array $answers) {
+    public function grade(Test $test, array $answers, array $questionIds = []) {
 
         $questions = count($questionIds) ? $test->questions()->whereIsActive(1)->whereIn('questions.id', $questionIds)
                                                 ->get() : $test->questions()->whereIsActive(1)->get();
