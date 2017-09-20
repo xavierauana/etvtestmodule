@@ -17,7 +17,7 @@ class InlineMultipleChoice implements CreateQuestionInterface
 {
 
     /**
-     * @param array     $inputs
+     * @param array                            $inputs
      * @param \Anacreation\Etvtest\Models\Test $test
      * @return Question
      */
@@ -28,12 +28,12 @@ class InlineMultipleChoice implements CreateQuestionInterface
 
         foreach ($inputs['titles'] as $title) {
 
-            $subQuestion = $this->createSubQuestion($inputs, $mainQuestion, $title);
+            $subQuestion = $this->createSubQuestion($inputs, $mainQuestion,
+                $title);
 
             foreach ($inputs['choices'] as $choice) {
 
                 if (strpos(urldecode($choice['textareaId']), $title) > -1) {
-
                     $this->createChoice($subQuestion, $choice);
                 }
             }
@@ -62,10 +62,13 @@ class InlineMultipleChoice implements CreateQuestionInterface
      * @param       $title
      * @return mixed
      */
-    private function createSubQuestion(array $inputs, Question $mainQuestion, $title) {
+    private function createSubQuestion(
+        array $inputs, Question $mainQuestion, $title
+    ) {
         $subQuestion = $mainQuestion->subQuestions()->create([
             'content'          => $title,
-            'question_type_id' => QuestionType::whereCode('SingleMultipleChoice')->firstOrFail()->id,
+            'question_type_id' => QuestionType::whereCode('SingleMultipleChoice')
+                                              ->firstOrFail()->id,
             'is_active'        => $inputs["is_active"]
         ]);
 

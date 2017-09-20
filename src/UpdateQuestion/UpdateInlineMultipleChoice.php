@@ -66,7 +66,6 @@ class UpdateInlineMultipleChoice implements UpdateOperatorInterface
             } else {
                 $this->createSubQuestion($sub_question_data);
             }
-
         }
     }
 
@@ -99,6 +98,8 @@ class UpdateInlineMultipleChoice implements UpdateOperatorInterface
 
         $this->updateQuestionAnswer($newSubQuestion, $correctedIds);
 
+        $this->subQuestionIds[] = $newSubQuestion->id;
+
         return $newSubQuestion;
     }
 
@@ -125,7 +126,6 @@ class UpdateInlineMultipleChoice implements UpdateOperatorInterface
         $correctedIds = [];
 
         foreach ($choicesData as $choiceData) {
-
             if ($this->isActiveExistingChoice($choiceData)) {
                 $this->updateExistingChoice($subQuestion, $choiceData);
             } elseif ($this->needsToDelete($choiceData)) {
