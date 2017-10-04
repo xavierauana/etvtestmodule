@@ -34,8 +34,10 @@ class MultipleFillInBlanksGrader implements GraderInterface
             return [false, $answerStringArray];
         }
 
-        return [$this->checkAnswer($answers, $answerObject, $answerStringArray), $answerStringArray];
-
+        return [
+            $this->checkAnswer($answers, $answerObject, $answerStringArray),
+            $answerStringArray
+        ];
     }
 
     private function cleanUserInputAnswerArray(array $answers): array {
@@ -50,12 +52,15 @@ class MultipleFillInBlanksGrader implements GraderInterface
      * @param       $answerStringArray
      * @return array
      */
-    private function checkAnswer(array $answers, $answerObject, $answerStringArray): bool {
+    private function checkAnswer(
+        array $answers, $answerObject, $answerStringArray
+    ): bool {
 
         if ($this->requiredAllAndInOrdered($answerObject)) {
             $correct = true;
             foreach ($answerStringArray as $index => $answerString) {
-                if (!isset($answers[$index]) or $answers[$index] != $answerString) {
+                if (!isset($answers[$index]) or $this->isAnswerCorrect($answers[$index],
+                        $answerString)) {
                     $correct = false;
                 }
             }
@@ -72,7 +77,8 @@ class MultipleFillInBlanksGrader implements GraderInterface
         if ($this->notRequiredAllAndInOrdered($answerObject)) {
             $correct = true;
             foreach ($answers as $index => $answer) {
-                if ($answerStringArray[$index] != $answer) {
+                if ($this->isAnswerCorrect($answerStringArray[$index],
+                    $answer)) {
                     $correct = false;
                 }
             }
@@ -117,5 +123,16 @@ class MultipleFillInBlanksGrader implements GraderInterface
      */
     private function notRequiredAllAndNotInOrdered($answerObject): bool {
         return !$answerObject->is_required_all and !$answerObject->is_ordered;
+    }
+
+    /**
+     * @param $answerStringArray
+     * @param $index
+     * @param $answer
+     * @return bool
+     */
+    private function isAnswerCorrect(string $submitted, string $correctedAnswer
+    ): bool {
+        return trim($submitted) != trim($correctedAnswer);
     }
 }

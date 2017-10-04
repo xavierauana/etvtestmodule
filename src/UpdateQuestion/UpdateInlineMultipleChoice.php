@@ -62,8 +62,11 @@ class UpdateInlineMultipleChoice implements UpdateOperatorInterface
         foreach ($data['sub_questions'] as $sub_question_data) {
 
             if ($this->isExistingSubQuestion($sub_question_data)) {
+
                 $this->updateExistingSubQuestion($sub_question_data);
+
             } else {
+                
                 $this->createSubQuestion($sub_question_data);
             }
         }
@@ -75,9 +78,11 @@ class UpdateInlineMultipleChoice implements UpdateOperatorInterface
      */
     private function updateExistingSubQuestion($sub_question): void {
 
-        $subQuestion = $this->question->subQuestions()->findOrFail($sub_question['id']);
+        $subQuestion = $this->question->subQuestions()
+                                      ->findOrFail($sub_question['id']);
 
-        $correctedIds = $this->updateSubQuestionChoice($sub_question['choices'], $subQuestion);
+        $correctedIds = $this->updateSubQuestionChoice($sub_question['choices'],
+            $subQuestion);
 
         $this->updateQuestionAnswer($subQuestion, $correctedIds);
 
@@ -94,7 +99,8 @@ class UpdateInlineMultipleChoice implements UpdateOperatorInterface
         /** @var Question $newSubQuestion */
         $newSubQuestion = $this->question->subQuestions()->create($data);
 
-        $correctedIds = $this->updateSubQuestionChoice($data['choices'], $newSubQuestion);
+        $correctedIds = $this->updateSubQuestionChoice($data['choices'],
+            $newSubQuestion);
 
         $this->updateQuestionAnswer($newSubQuestion, $correctedIds);
 
@@ -104,7 +110,9 @@ class UpdateInlineMultipleChoice implements UpdateOperatorInterface
     }
 
     private function deleteSubQuestions(): void {
-        $questions = $this->question->subQuestions()->whereNotIn('id', $this->subQuestionIds)->get();
+        $questions = $this->question->subQuestions()
+                                    ->whereNotIn('id', $this->subQuestionIds)
+                                    ->get();
 
         /** @var Question $question */
         foreach ($questions as $question) {
@@ -121,7 +129,8 @@ class UpdateInlineMultipleChoice implements UpdateOperatorInterface
 
     // Choices
 
-    private function updateSubQuestionChoice($choicesData, $subQuestion): array {
+    private function updateSubQuestionChoice($choicesData, $subQuestion
+    ): array {
 
         $correctedIds = [];
 
@@ -131,7 +140,8 @@ class UpdateInlineMultipleChoice implements UpdateOperatorInterface
             } elseif ($this->needsToDelete($choiceData)) {
                 $this->deleteChoice($subQuestion, $choiceData);
             } elseif ($this->needsToCreateChoice($choiceData)) {
-                $choiceData['id'] = $this->createChoice($subQuestion, $choiceData)->id;
+                $choiceData['id'] = $this->createChoice($subQuestion,
+                    $choiceData)->id;
             }
 
             if ($choiceData['active'] and $choiceData['is_corrected']) {
@@ -147,7 +157,8 @@ class UpdateInlineMultipleChoice implements UpdateOperatorInterface
      * @param $subQuestion
      * @param $choiceData
      */
-    private function createChoice(Question $subQuestion, array $choiceData): Choice {
+    private function createChoice(Question $subQuestion, array $choiceData
+    ): Choice {
 
         /** @var Choice $newChoice */
         $newChoice = $subQuestion->choices()->create($choiceData);
@@ -160,7 +171,8 @@ class UpdateInlineMultipleChoice implements UpdateOperatorInterface
      * @param $choiceData
      */
     private function updateExistingChoice($subQuestion, $choiceData): void {
-        $subQuestion->choices()->findOrFail($choiceData['id'])->update($choiceData);
+        $subQuestion->choices()->findOrFail($choiceData['id'])
+                    ->update($choiceData);
     }
 
     /**
@@ -173,7 +185,8 @@ class UpdateInlineMultipleChoice implements UpdateOperatorInterface
 
     // Answer
 
-    private function updateQuestionAnswer(Question $question, $correctedIds): Answer {
+    private function updateQuestionAnswer(Question $question, $correctedIds
+    ): Answer {
 
         $answer = $question->answer;
 
