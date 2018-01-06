@@ -14,4 +14,5 @@ return [
     'test_observation'     => env('TEST_OBSERVATION', false),
     'choice_observation'   => env('CHOICE_OBSERVATION', false),
     'question_observation' => env('QUESTION_OBSERVATION', false),
+    'record_table'         => env('RECORD_TABLE'),
 ];
