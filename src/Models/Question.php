@@ -2,6 +2,7 @@
 
 namespace Anacreation\Etvtest\Models;
 
+use Anacreation\Etvtest\Observers\QuestionObserver;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,6 +17,13 @@ class Question extends Model
         "page_number",
         'order'
     ];
+
+    public static function boot() {
+        parent::boot();
+        if (strtolower(env('QUESTION_OBSERVATION', 'false')) === 'true') {
+            Question::observe(QuestionObserver::class);
+        }
+    }
 
     public function QuestionType() {
         return $this->belongsTo(QuestionType::class);

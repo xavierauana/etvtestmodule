@@ -2,6 +2,7 @@
 
 namespace Anacreation\Etvtest\Models;
 
+use Anacreation\Etvtest\Observers\TestObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Collection;
@@ -15,6 +16,14 @@ class Test extends Model
         'order'
     ];
 
+    public static function boot() {
+        parent::boot();
+
+        if (strtolower(env('TEST_OBSERVATION', 'false')) === 'true') {
+            Test::observe(TestObserver::class);
+        }
+    }
+
     public function questions() {
         return $this->belongsToMany(Question::class);
     }
@@ -24,7 +33,7 @@ class Test extends Model
     }
 
     public function __get($key) {
-        return parent::__get($key)??$this->getTestableRelation($key);
+        return parent::__get($key) ?? $this->getTestableRelation($key);
     }
 
     private function getTestableRelation($key): ?Collection {

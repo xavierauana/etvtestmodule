@@ -2,6 +2,7 @@
 
 namespace Anacreation\Etvtest\Models;
 
+use Anacreation\Etvtest\Observers\ChoiceObserver;
 use Illuminate\Database\Eloquent\Model;
 
 class Choice extends Model
@@ -9,6 +10,13 @@ class Choice extends Model
     protected $fillable = [
         'content'
     ];
+
+    public static function boot() {
+        parent::boot();
+        if (strtolower(env('CHOICE_OBSERVATION', 'false')) === 'true') {
+            Choice::observe(ChoiceObserver::class);
+        }
+    }
 
     public function question() {
         return $this->belongsTo(Question::class);
