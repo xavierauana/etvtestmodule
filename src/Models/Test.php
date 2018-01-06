@@ -19,7 +19,7 @@ class Test extends Model
     public static function boot() {
         parent::boot();
 
-        if (strtolower(env('TEST_OBSERVATION', 'false')) === 'true') {
+        if (config('test.test_observation')) {
             Test::observe(TestObserver::class);
         }
     }

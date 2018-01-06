@@ -8,7 +8,10 @@
 use App\Page;
 
 return [
-    'testable_class' => [
+    'testable_class'       => [
         'page' => Page::class
-    ]
+    ],
+    'test_observation'     => env('TEST_OBSERVATION', false),
+    'choice_observation'   => env('CHOICE_OBSERVATION', false),
+    'question_observation' => env('QUESTION_OBSERVATION', false),
 ];

@@ -20,7 +20,7 @@ class Question extends Model
 
     public static function boot() {
         parent::boot();
-        if (strtolower(env('QUESTION_OBSERVATION', 'false')) === 'true') {
+        if (strtolower(config("test.question_observation")) === 'true') {
             Question::observe(QuestionObserver::class);
         }
     }

@@ -13,7 +13,7 @@ class Choice extends Model
 
     public static function boot() {
         parent::boot();
-        if (strtolower(env('CHOICE_OBSERVATION', 'false')) === 'true') {
+        if (config('choice_observation')) {
             Choice::observe(ChoiceObserver::class);
         }
     }
