@@ -19,8 +19,12 @@ class GradingService
 
     public function grade(Test $test, array $answers, array $questionIds = []) {
 
-        $questions = count($questionIds) ? $test->questions()->whereIsActive(1)->whereIn('questions.id', $questionIds)
-                                                ->get() : $test->questions()->whereIsActive(1)->get();
+        $questions = count($questionIds) ? $test->questions()->whereIsActive(1)
+                                                ->whereIn('questions.id',
+                                                    $questionIds)
+                                                ->get() : $test->questions()
+                                                               ->whereIsActive(1)
+                                                               ->get();
 
         foreach ($questions as $question) {
             $this->_grade($question, $answers);
@@ -35,9 +39,11 @@ class GradingService
         } else {
             $answerArray = $this->getTheAnswerArray($question, $answers);
 
-            list($is_correct, $correct_answer) = GraderManger::grade($question, $answerArray);
+            list($is_correct, $correct_answer) = GraderManger::grade($question,
+                $answerArray);
 
-            $this->constructData($is_correct, $question, $answerArray, $correct_answer);
+            $this->constructData($is_correct, $question, $answerArray,
+                $correct_answer);
         }
 
     }
@@ -48,7 +54,9 @@ class GradingService
      * @param $answerArray
      * @param $correct_answer
      */
-    private function constructData($is_correct, $question, $answerArray, $correct_answer) {
+    private function constructData(
+        $is_correct, $question, $answerArray, $correct_answer
+    ) {
         $this->summary['correct'] = $is_correct ? $this->summary['correct'] + 1 : $this->summary['correct'];
         $this->result[] = [
             'id'             => $question->id,
@@ -65,12 +73,18 @@ class GradingService
      */
     private function getTheAnswerArray(Question $question, array $answers) {
 
-        $answerArray = array_filter($answers, function ($answer) use ($question) {
-            return $answer['id'] == $question->id;
-        });
+        $answerArray = array_filter($answers,
+            function ($answer) use ($question) {
+                return $answer['id'] == $question->id;
+            });
         if (count($answerArray) > 0) {
             $answerArray = array_shift($answerArray);
-            $answerArray = is_array($answerArray['answer']) ? $answerArray['answer'] : [$answerArray['answer']];
+            if (isset($answerArray['answer'])) {
+                $answerArray = is_array($answerArray['answer']) ? $answerArray['answer'] : [$answerArray['answer']];
+            } else {
+                $answerArray = [];
+            }
+
         }
 
         return $answerArray;

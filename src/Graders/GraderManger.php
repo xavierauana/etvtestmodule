@@ -8,13 +8,14 @@
 namespace Anacreation\Etvtest\Graders;
 
 
+use Anacreation\Etvtest\Factory\QuestionGraderFactory;
 use Anacreation\Etvtest\Models\Question;
 
 class GraderManger
 {
-    public static function grade(Question $question, array $answers){
-        $class = "\\Anacreation\\Etvtest\\Graders\\{$question->QuestionType->code}Grader";
-        $grader = app($class);
+    public static function grade(Question $question, array $answers) {
+        $grader = QuestionGraderFactory::make($question);
+
         return $grader->grade($question, $answers);
     }
 }

@@ -16,23 +16,26 @@ class SingleMultipleChoice implements CreateQuestionInterface
 
 
     /**
-     * @param array     $inputs
+     * @param array                            $inputs
      * @param \Anacreation\Etvtest\Models\Test $test
      * @return \Illuminate\Database\Eloquent\Model
      */
     public function create(array $inputs, Test $test) {
 
         $question = $test->questions()
-            ->create($inputs);
+                         ->create($inputs);
 
-        foreach ($inputs['choices'] as $choice){
+        foreach ($inputs['choices'] as $choice) {
             $newChoice = $question->choices()->create($choice);
-            if($choice['is_corrected']) $question->answer()->create([
-               'content'=>$newChoice->id,
-               'is_ordered'=>false,
-               'is_required_all'=>false
-            ]);
+            if ($choice['is_corrected']) {
+                $question->answer()->create([
+                    'content'         => $newChoice->id,
+                    'is_ordered'      => false,
+                    'is_required_all' => false
+                ]);
+            }
         }
+
         return $question;
     }
 }
