@@ -28,6 +28,10 @@ class Test extends Model
         return $this->belongsToMany(Question::class);
     }
 
+    public function addQuestion(Question $question) {
+        return $this->questions()->save($question);
+    }
+
     private function testableRelation(string $objectFullName): Relation {
         return $this->morphedByMany($objectFullName, 'testable');
     }

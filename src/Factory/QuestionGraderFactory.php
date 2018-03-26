@@ -14,6 +14,7 @@ use Anacreation\Etvtest\Models\Question;
 class QuestionGraderFactory
 {
     public static function make(Question $question): GraderInterface {
+
         $class = "\\Anacreation\\Etvtest\\Graders\\{$question->QuestionType->code}Grader";
 
         return app($class);
