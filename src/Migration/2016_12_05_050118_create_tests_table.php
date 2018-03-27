@@ -14,8 +14,8 @@ class CreateTestsTable extends Migration
     public function up() {
         Schema::create('tests', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('title');
-            $table->string('content');
+            $table->string('title')->nullable();
+            $table->string('content')->nullable();
             $table->boolean('is_active')->default(true);
             $table->integer('order')->default(0);
             $table->timestamps();
