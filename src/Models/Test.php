@@ -41,22 +41,32 @@ class Test extends Model
     }
 
     private function getTestableRelation($key): ?Collection {
-        $mapping = config('test.testable_class');
-        $result = null;
-        if (in_array($key, array_keys($mapping))) {
-            try {
-                $result = $this->testableRelation($mapping[$key])->get();
-            } catch (\Exception $e) {
-                Log::error("Unable to get inverse testable relation");
-                Log::error($e->getMessage());
-            } catch (\Error $e) {
-                Log::error("Unable to get inverse testable relation");
-                Log::error($e->getMessage());
-            } finally {
-                return $result;
+
+        try {
+            $mapping = config('test.testable_class');
+
+            $result = null;
+            if (in_array($key, array_keys($mapping))) {
+                try {
+                    $result = $this->testableRelation($mapping[$key])->get();
+                } catch (\Exception $e) {
+                    Log::error("Unable to get inverse testable relation");
+                    Log::error($e->getMessage());
+                } catch (\Error $e) {
+                    Log::error("Unable to get inverse testable relation");
+                    Log::error($e->getMessage());
+                } finally {
+                    return $result;
+                }
             }
+
+            return $result;
+
+        } catch (\Exception $e) {
+            Log::error("Not get Testable relationship");
+
+            return null;
         }
 
-        return $result;
     }
 }
