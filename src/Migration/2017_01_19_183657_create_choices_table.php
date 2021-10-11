@@ -14,8 +14,8 @@ class CreateChoicesTable extends Migration
     public function up()
     {
         Schema::create('choices', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('question_id')->unsigned();
+            $table->id('id');
+            $table->unsignedBigInteger('question_id');
             $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');
             $table->text('content');
             $table->timestamps();

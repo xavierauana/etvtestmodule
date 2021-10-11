@@ -11,9 +11,10 @@ class CreateTestsTable extends Migration
      *
      * @return void
      */
-    public function up() {
+    public function up()
+    {
         Schema::create('tests', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id('id');
             $table->string('title')->nullable();
             $table->string('content')->nullable();
             $table->boolean('is_active')->default(true);
@@ -22,15 +23,14 @@ class CreateTestsTable extends Migration
         });
 
         Schema::create('test_user', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('user_id')->unsigned();
+            $table->id('id');
+            $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->integer('test_id')->unsigned();
+            $table->unsignedBigInteger('test_id');
             $table->foreign('test_id')->references('id')->on('tests');
             $table->boolean('can_test')->default(true);
             $table->timestamps();
         });
-
     }
 
     /**
@@ -38,7 +38,8 @@ class CreateTestsTable extends Migration
      *
      * @return void
      */
-    public function down() {
+    public function down()
+    {
         Schema::dropIfExists('test_user');
         Schema::dropIfExists('tests');
     }

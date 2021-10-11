@@ -11,10 +11,11 @@ class CreateAnswersTable extends Migration
      *
      * @return void
      */
-    public function up() {
+    public function up()
+    {
         Schema::create('answers', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('question_id')->unsigned();
+            $table->id('id');
+            $table->unsignedBigInteger('question_id');
             $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');
             $table->text('content');
             $table->boolean('is_ordered')->default(false);
@@ -28,7 +29,8 @@ class CreateAnswersTable extends Migration
      *
      * @return void
      */
-    public function down() {
+    public function down()
+    {
         Schema::dropIfExists('answers');
     }
 }

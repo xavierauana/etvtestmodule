@@ -14,7 +14,7 @@ class CreateQuestionTypesTable extends Migration
     public function up()
     {
         Schema::create('question_types', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id('id');
             $table->string("label");
             $table->string("code")->unique();
             $table->timestamps();

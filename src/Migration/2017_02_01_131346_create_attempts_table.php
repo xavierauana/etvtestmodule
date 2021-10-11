@@ -11,11 +11,12 @@ class CreateAttemptsTable extends Migration
      *
      * @return void
      */
-    public function up() {
+    public function up()
+    {
         Schema::create('attempts', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('test_id')->unsigned();
-            $table->integer('user_id')->unsinged();
+            $table->id('id');
+            $table->unsignedBigInteger('test_id');
+            $table->unsignedBigInteger('user_id');
             $table->double('score')->nullable();
             $table->text('attempt');
             $table->timestamps();
@@ -27,7 +28,8 @@ class CreateAttemptsTable extends Migration
      *
      * @return void
      */
-    public function down() {
+    public function down()
+    {
         Schema::dropIfExists('attempts');
     }
 }
