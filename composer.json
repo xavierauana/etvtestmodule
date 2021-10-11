@@ -29,5 +29,12 @@
     "files": [
       "src/Helpers/Utilities.php"
     ]
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Anacreation\\Etvtest\\EtvTestServiceProvider"
+      ]
+    }
   }
 }
