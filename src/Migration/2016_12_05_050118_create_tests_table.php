@@ -24,10 +24,8 @@ class CreateTestsTable extends Migration
 
         Schema::create('test_user', function (Blueprint $table) {
             $table->id('id');
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->unsignedBigInteger('test_id');
-            $table->foreign('test_id')->references('id')->on('tests');
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('test_id')->constrained();
             $table->boolean('can_test')->default(true);
             $table->timestamps();
         });
